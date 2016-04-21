@@ -1,0 +1,12 @@
+acl acl-src-0 src 1.2.3.4 4.3.2.1 95.27.73.59
+acl acl-ip-0 localip 172.110.6.196
+http_access allow acl-src-0 acl-ip-0
+acl acl-name-user3 proxy_auth user3
+acl acl-ip-user3 localip 172.110.6.197
+http_access allow acl-ip-user3 acl-name-user3
+acl acl-name-user4 proxy_auth user4
+acl acl-ip-user4 localip 172.110.6.197
+http_access allow acl-ip-user4 acl-name-user4
+acl acl-src-1 src 95.27.73.59
+acl acl-ip-1 localip 172.110.6.197
+http_access allow acl-src-1 acl-ip-1

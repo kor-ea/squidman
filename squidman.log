@@ -1,0 +1,78 @@
+---STARTED at Thu Apr 21 15:34:55 2016
+172.110.6.196   1.2.3.4,4.3.2.1,95.27.73.59
+172.110.6.197 user3 test123! 
+172.110.6.197 user4 test123! 
+2016/04/21 15:34:55| Startup: Initializing Authentication Schemes ...
+2016/04/21 15:34:55| Startup: Initialized Authentication Scheme 'basic'
+2016/04/21 15:34:55| Startup: Initialized Authentication Scheme 'digest'
+2016/04/21 15:34:55| Startup: Initialized Authentication Scheme 'negotiate'
+2016/04/21 15:34:55| Startup: Initialized Authentication Scheme 'ntlm'
+2016/04/21 15:34:55| Startup: Initialized Authentication.
+2016/04/21 15:34:55| Processing Configuration File: /etc/squid3/squid.conf (depth 0)
+2016/04/21 15:34:55| Processing: dns_v4_first on
+2016/04/21 15:34:55| Processing: auth_param basic program /usr/lib/squid3/basic_ncsa_auth /etc/squid3/passwd
+2016/04/21 15:34:55| Processing: auth_param basic realm proxy
+2016/04/21 15:34:55| Processing: acl acl-src src 127.0.0.1/32
+2016/04/21 15:34:55| Processing: include /etc/squid3/squidman.acl
+2016/04/21 15:34:55| Processing Configuration File: /etc/squid3/squidman.acl (depth 1)
+2016/04/21 15:34:55| Processing: acl acl-src src 1.2.3.4
+2016/04/21 15:34:55| Processing: acl acl-src src 4.3.2.1
+2016/04/21 15:34:55| Processing: acl acl-src src 95.27.73.59
+2016/04/21 15:34:55| Processing: acl acl-name-user3 proxy_auth user3
+2016/04/21 15:34:55| Processing: acl acl-ip-user3 localip 172.110.6.197
+2016/04/21 15:34:55| Processing: http_access allow acl-ip-user3 acl-name-user3
+2016/04/21 15:34:55| Processing: acl acl-name-user4 proxy_auth user4
+2016/04/21 15:34:55| Processing: acl acl-ip-user4 localip 172.110.6.197
+2016/04/21 15:34:55| Processing: http_access allow acl-ip-user4 acl-name-user4
+2016/04/21 15:34:55| Processing: http_access allow acl-src
+2016/04/21 15:34:55| Processing: acl SSL_ports port 443
+2016/04/21 15:34:55| Processing: acl Safe_ports port 80        # http
+2016/04/21 15:34:55| Processing: acl Safe_ports port 21        # ftp
+2016/04/21 15:34:55| Processing: acl Safe_ports port 443        # https
+2016/04/21 15:34:55| Processing: acl Safe_ports port 1025-65535    # unregistered ports
+2016/04/21 15:34:55| Processing: acl Safe_ports port 280        # http-mgmt
+2016/04/21 15:34:55| Processing: acl Safe_ports port 488        # gss-http
+2016/04/21 15:34:55| Processing: acl Safe_ports port 591        # filemaker
+2016/04/21 15:34:55| Processing: acl Safe_ports port 777        # multiling http
+2016/04/21 15:34:55| Processing: acl CONNECT method CONNECT
+2016/04/21 15:34:55| Processing: http_access deny !Safe_ports
+2016/04/21 15:34:55| Processing: http_access deny CONNECT !SSL_ports
+2016/04/21 15:34:55| Processing: http_access deny all
+2016/04/21 15:34:55| Processing: http_port 3128
+2016/04/21 15:34:55| Processing: cache deny all
+2016/04/21 15:34:55| Processing: hierarchy_stoplist cgi-bin ?
+2016/04/21 15:34:55| Processing: coredump_dir /var/spool/squid3
+2016/04/21 15:34:55| Processing: refresh_pattern ^ftp:        1440    20%    10080
+2016/04/21 15:34:55| Processing: refresh_pattern ^gopher:    1440    0%    1440
+2016/04/21 15:34:55| Processing: refresh_pattern -i (/cgi-bin/|\?) 0    0%    0
+2016/04/21 15:34:55| Processing: refresh_pattern .        0    20%    4320
+2016/04/21 15:34:55| Processing: forwarded_for off
+2016/04/21 15:34:55| Processing: request_header_access Allow allow all
+2016/04/21 15:34:55| Processing: request_header_access Authorization allow all
+2016/04/21 15:34:55| Processing: request_header_access Proxy-Authorization allow all
+2016/04/21 15:34:55| Processing: request_header_access Proxy-Authenticate allow all
+2016/04/21 15:34:55| Processing: request_header_access Cache-Control allow all
+2016/04/21 15:34:55| Processing: request_header_access Content-Encoding allow all
+2016/04/21 15:34:55| Processing: request_header_access Content-Length allow all
+2016/04/21 15:34:55| Processing: request_header_access Content-Type allow all
+2016/04/21 15:34:55| Processing: request_header_access Date allow all
+2016/04/21 15:34:55| Processing: request_header_access Expires allow all
+2016/04/21 15:34:55| Processing: request_header_access Host allow all
+2016/04/21 15:34:55| Processing: request_header_access If-Modified-Since allow all
+2016/04/21 15:34:55| Processing: request_header_access Last-Modified allow all
+2016/04/21 15:34:55| Processing: request_header_access Location allow all
+2016/04/21 15:34:55| Processing: request_header_access Pragma allow all
+2016/04/21 15:34:55| Processing: request_header_access Accept allow all
+2016/04/21 15:34:55| Processing: request_header_access Accept-Charset allow all
+2016/04/21 15:34:55| Processing: request_header_access Accept-Encoding allow all
+2016/04/21 15:34:55| Processing: request_header_access Accept-Language allow all
+2016/04/21 15:34:55| Processing: request_header_access Content-Language allow all
+2016/04/21 15:34:55| Processing: request_header_access Mime-Version allow all
+2016/04/21 15:34:55| Processing: request_header_access Retry-After allow all
+2016/04/21 15:34:55| Processing: request_header_access Title allow all
+2016/04/21 15:34:55| Processing: request_header_access Connection allow all
+2016/04/21 15:34:55| Processing: request_header_access Proxy-Connection allow all
+2016/04/21 15:34:55| Processing: request_header_access User-Agent allow all
+2016/04/21 15:34:55| Processing: request_header_access Cookie allow all
+2016/04/21 15:34:55| Processing: request_header_access All deny all
+---FINISHED at Thu Apr 21 15:34:55 2016
