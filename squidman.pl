@@ -18,7 +18,7 @@ die "Usage: perl -w squidman.pl squid-ip" unless (defined $squidmainip);
 print "\n-------------------STARTED at ".localtime()."--------------\n";
 
 $dbh = DBI->connect("DBI:mysql:$dbname:$dbhost",$dbuser,$dbpass);
-$sth = $dbh->prepare("select ip,username,password,authorized_ip,port from squid_access where server=\'$squidmainip\' order by authorized_ip desc") ||
+$sth = $dbh->prepare("select ip,username,password,authorized_ip,port,maxthreads from squid_access where server=\'$squidmainip\' order by authorized_ip desc") ||
 	 die $dbh->errstr();
 $sth->execute() || die $sth->errstr();
 
@@ -29,8 +29,8 @@ my $ipaclcnt = 0;
 my $recordfound = 0;
 my $httpport = 0;
 while(@row = $sth -> fetchrow_array) {
-	my ($squidip, $squiduser, $squidpass, $squidauthip,$squidport) = @row;
-	print "\nFound record: $squidip:$squidport $squiduser $squidauthip\n";
+	my ($squidip, $squiduser, $squidpass, $squidauthip,$squidport,$maxthreads) = @row;
+	print "\nFound record: $squidip:$squidport max $maxthreads for $squiduser $squidauthip\n";
 	$recordfound = 1;
 	
 	if ($squiduser){
@@ -38,7 +38,9 @@ while(@row = $sth -> fetchrow_array) {
 		print ACL "acl acl-name-$squiduser proxy_auth $squiduser\n";
 		print ACL "acl acl-ip-$squiduser localip $squidip\n";
 		print ACL "acl acl-port-$squiduser localport $squidport\n";
+		print ACL "acl acl-maxconn-$squiduser maxconn $maxthreads\n";
 		print ACL "http_access allow acl-ip-$squiduser acl-name-$squiduser acl-port-$squiduser\n";
+		print ACL "http_access deny acl-name-$squiduser acl-maxconn-$squiduser\n";
 		print ACL "tcp_outgoing_address $squidip acl-name-$squiduser\n\n";
 		print "    ";
 		if ($htpasswd_exists) {
@@ -55,7 +57,9 @@ while(@row = $sth -> fetchrow_array) {
 		print ACL "acl acl-src-$ipaclcnt src $squidauthip\n";				
 		print ACL "acl acl-ip-$ipaclcnt localip $squidip\n";				
 		print ACL "acl acl-port-$ipaclcnt localport $squidport\n";
+		print ACL "acl acl-maxconn-$ipaclcnt maxconn $maxthreads\n";
 		print ACL "http_access allow acl-src-$ipaclcnt acl-ip-$ipaclcnt acl-port-$ipaclcnt\n";				
+		print ACL "http_access deny acl-src-$ipaclcnt acl-maxconn-$ipaclcnt\n";
 		print ACL "tcp_outgoing_address $squidip acl-src-$ipaclcnt\n\n";
 		$ipaclcnt++;
 #		}
@@ -63,7 +67,7 @@ while(@row = $sth -> fetchrow_array) {
 	if ($squidport){
 		if($httpport != $squidport){
 			print "\nAdding http_port $squidport\n\n";					
-			print ACL "\nhttp_port $squidport\n\n";					
+			print ACL "http_port $squidport\n\n";					
 			$httpport = $squidport;			
 		}
 	}
