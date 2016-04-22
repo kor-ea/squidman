@@ -1,37 +1,48 @@
 acl acl-src-0 src 95.27.95.204
 acl acl-ip-0 localip 172.110.6.245
-http_access allow acl-src-0 acl-ip-0
+acl acl-port-0 localport 8080
+http_access allow acl-src-0 acl-ip-0 acl-port-0
 tcp_outgoing_address 172.110.6.245 acl-src-0
+
+
+http_port 8080
 
 acl acl-src-1 src 178.24.142.111
 acl acl-ip-1 localip 172.110.6.243
-http_access allow acl-src-1 acl-ip-1
+acl acl-port-1 localport 3128
+http_access allow acl-src-1 acl-ip-1 acl-port-1
 tcp_outgoing_address 172.110.6.243 acl-src-1
+
+
+http_port 3128
 
 acl acl-src-2 src 178.24.142.111
 acl acl-ip-2 localip 172.110.6.244
-http_access allow acl-src-2 acl-ip-2
+acl acl-port-2 localport 3128
+http_access allow acl-src-2 acl-ip-2 acl-port-2
 tcp_outgoing_address 172.110.6.244 acl-src-2
 
 acl acl-src-3 src 178.24.142.111
 acl acl-ip-3 localip 172.110.6.245
-http_access allow acl-src-3 acl-ip-3
+acl acl-port-3 localport 3128
+http_access allow acl-src-3 acl-ip-3 acl-port-3
 tcp_outgoing_address 172.110.6.245 acl-src-3
 
 acl acl-name-user1 proxy_auth user1
 acl acl-ip-user1 localip 172.110.6.244
-http_access allow acl-ip-user1 acl-name-user1
+acl acl-port-user1 localport 3128
+http_access allow acl-ip-user1 acl-name-user1 acl-port-user1
 tcp_outgoing_address 172.110.6.244 acl-name-user1
 
 acl acl-name-user2 proxy_auth user2
 acl acl-ip-user2 localip 172.110.6.245
-http_access allow acl-ip-user2 acl-name-user2
+acl acl-port-user2 localport 3128
+http_access allow acl-ip-user2 acl-name-user2 acl-port-user2
 tcp_outgoing_address 172.110.6.245 acl-name-user2
 
 acl acl-name-user5 proxy_auth user5
 acl acl-ip-user5 localip 172.110.6.245
-http_access allow acl-ip-user5 acl-name-user5
+acl acl-port-user5 localport 3128
+http_access allow acl-ip-user5 acl-name-user5 acl-port-user5
 tcp_outgoing_address 172.110.6.245 acl-name-user5
-
-http_port 3128
 

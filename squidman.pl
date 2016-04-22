@@ -27,19 +27,18 @@ open(ACL,'>'.$acl) || die "!!! can\'t create $acl";
 my $htpasswd_exits = 0;
 my $ipaclcnt = 0;
 my $recordfound = 0;
-my $httpport = 3128;
+my $httpport = 0;
 while(@row = $sth -> fetchrow_array) {
 	my ($squidip, $squiduser, $squidpass, $squidauthip,$squidport) = @row;
 	print "\nFound record: $squidip:$squidport $squiduser $squidauthip\n";
 	$recordfound = 1;
-	if ($squidport){
-		$httpport = $squidport;
-	}
+	
 	if ($squiduser){
 		print "    Adding ACL for $squiduser\n";
 		print ACL "acl acl-name-$squiduser proxy_auth $squiduser\n";
 		print ACL "acl acl-ip-$squiduser localip $squidip\n";
-		print ACL "http_access allow acl-ip-$squiduser acl-name-$squiduser\n";
+		print ACL "acl acl-port-$squiduser localport $squidport\n";
+		print ACL "http_access allow acl-ip-$squiduser acl-name-$squiduser acl-port-$squiduser\n";
 		print ACL "tcp_outgoing_address $squidip acl-name-$squiduser\n\n";
 		print "    ";
 		if ($htpasswd_exists) {
@@ -55,14 +54,20 @@ while(@row = $sth -> fetchrow_array) {
 		print "    Adding ACL for IP addresses $squidauthip\n";
 		print ACL "acl acl-src-$ipaclcnt src $squidauthip\n";				
 		print ACL "acl acl-ip-$ipaclcnt localip $squidip\n";				
-		print ACL "http_access allow acl-src-$ipaclcnt acl-ip-$ipaclcnt\n";				
+		print ACL "acl acl-port-$ipaclcnt localport $squidport\n";
+		print ACL "http_access allow acl-src-$ipaclcnt acl-ip-$ipaclcnt acl-port-$ipaclcnt\n";				
 		print ACL "tcp_outgoing_address $squidip acl-src-$ipaclcnt\n\n";
 		$ipaclcnt++;
 #		}
 	}
+	if ($squidport){
+		if($httpport != $squidport){
+			print "\nAdding http_port $squidport\n\n";					
+			print ACL "\nhttp_port $squidport\n\n";					
+			$httpport = $squidport;			
+		}
+	}
 }
-print "Adding http_port $httpport\n\n";					
-print ACL "http_port $httpport\n\n";					
 close(ACL);
 $sth->finish();
 $dbh->disconnect();
