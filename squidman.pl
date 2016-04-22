@@ -20,7 +20,7 @@ print "\n-------------------STARTED at ".localtime()."--------------\n";
 $dbh = DBI->connect("DBI:mysql:$dbname:$dbhost",$dbuser,$dbpass);
 $sth = $dbh->prepare("select ip,username,password,authorized_ip from squid_access where server=\'$squidmainip\'") ||
 	 die $dbh->errstr();
-$sth->execute();
+$sth->execute() || die $sth->errstr();
 
 open(ACL,'>'.$acl) || die "!!! can\'t create $acl";
 
