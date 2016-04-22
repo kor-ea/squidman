@@ -52,15 +52,16 @@ while(@row = $sth -> fetchrow_array) {
 #		}
 	}
 }
+
+close(ACL);
+$sth->finish();
+$dbh->disconnect();
+
 print "\nCopying config to $squidmainip\...\n";
 system("/usr/bin/scp $acl $htpasswd squid.conf $squidmainip:/etc/squid3/") == 0 || die "!!!can\'t copy config to remote";
 #system("/usr/bin/ssh -t $squidmainip \'squid3 -k parse &1>/dev/null\'") == 0 || die "---error in squid config" ;
 print "\nApplying config...\n";
-system("/usr/bin/ssh -t $squidmainip \'squid3 -k reconfigure\'") == 0 || die "!!!can\'t reconfigure" ;
+system("/usr/bin/ssh -t $squidmainip \'squid3 -k reconfigure\'") == 0 || die "!!!can\'t apply config" ;
 
-
-$sth->finish();
-$dbh->disconnect();
-close(ACL);
 print "-------------------FINISHED at ".localtime()."--------------\n\n";
 
