@@ -22,13 +22,15 @@ $sth = $dbh->prepare("select ip,username,password,authorized_ip from squid_acces
 	 die $dbh->errstr();
 $sth->execute();
 
-open(ACL,'>'.$acl) || die "!!!can\'t create $acl";
+open(ACL,'>'.$acl) || die "!!! can\'t create $acl";
 
 my $htpasswd_exits = 0;
 my $ipaclcnt = 0;
+my $recordfound = 0;
 while(@row = $sth -> fetchrow_array) {
 	my ($squidip, $squiduser, $squidpass, $squidauthip) = @row;
 	print "\nFound record: $squidip $squiduser $squidauthip\n";
+	$recordfound = 1;
 	if ($squiduser){
 		print "    Adding ACL for $squiduser\n";
 		print ACL "acl acl-name-$squiduser proxy_auth $squiduser\n";
@@ -57,11 +59,14 @@ close(ACL);
 $sth->finish();
 $dbh->disconnect();
 
-print "\nCopying config to $squidmainip\...\n";
-system("/usr/bin/scp $acl $htpasswd squid.conf $squidmainip:/etc/squid3/") == 0 || die "!!!can\'t copy config to remote";
-#system("/usr/bin/ssh -t $squidmainip \'squid3 -k parse &1>/dev/null\'") == 0 || die "---error in squid config" ;
-print "\nApplying config...\n";
-system("/usr/bin/ssh -t $squidmainip \'squid3 -k reconfigure\'") == 0 || die "!!!can\'t apply config" ;
-
-print "-------------------FINISHED at ".localtime()."--------------\n\n";
+if ($recordfound){
+	print "\nCopying config to $squidmainip\...\n";
+	system("/usr/bin/scp $acl $htpasswd squid.conf $squidmainip:/etc/squid3/") == 0 || die "!!! can\'t copy config to remote";
+	#system("/usr/bin/ssh -t $squidmainip \'squid3 -k parse &1>/dev/null\'") == 0 || die "---error in squid config" ;
+	print "\nApplying config...\n";
+	system("/usr/bin/ssh -t $squidmainip \'squid3 -k reconfigure\'") == 0 || die "!!! can\'t apply config" ;
+}else{
+	print "\n!!! No records were found for specified squid server $squidmainip\.\n";
+}
+print "\n-------------------FINISHED at ".localtime()."--------------\n\n";
 
