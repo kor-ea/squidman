@@ -39,8 +39,8 @@ while(@row = $sth -> fetchrow_array) {
 		print ACL "acl acl-ip-$squiduser localip $squidip\n";
 		print ACL "acl acl-port-$squiduser localport $squidport\n";
 		print ACL "acl acl-maxconn-$squiduser maxconn $maxthreads\n";
-		print ACL "http_access allow acl-ip-$squiduser acl-name-$squiduser acl-port-$squiduser\n";
 		print ACL "http_access deny acl-name-$squiduser acl-maxconn-$squiduser\n";
+		print ACL "http_access allow acl-ip-$squiduser acl-name-$squiduser acl-port-$squiduser\n";
 		print ACL "tcp_outgoing_address $squidip acl-name-$squiduser\n\n";
 		print "    ";
 		if ($htpasswd_exists) {
@@ -58,8 +58,8 @@ while(@row = $sth -> fetchrow_array) {
 		print ACL "acl acl-ip-$ipaclcnt localip $squidip\n";				
 		print ACL "acl acl-port-$ipaclcnt localport $squidport\n";
 		print ACL "acl acl-maxconn-$ipaclcnt maxconn $maxthreads\n";
-		print ACL "http_access allow acl-src-$ipaclcnt acl-ip-$ipaclcnt acl-port-$ipaclcnt\n";				
 		print ACL "http_access deny acl-src-$ipaclcnt acl-maxconn-$ipaclcnt\n";
+		print ACL "http_access allow acl-src-$ipaclcnt acl-ip-$ipaclcnt acl-port-$ipaclcnt\n";				
 		print ACL "tcp_outgoing_address $squidip acl-src-$ipaclcnt\n\n";
 		$ipaclcnt++;
 #		}
