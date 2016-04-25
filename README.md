@@ -4,10 +4,7 @@
 2. Install DBI module for Perl: `cpan DBI`
 3. Clone squidman to local server: `git clone https://github.com/kor-ea/squidman`
 4. Edit squidman.pl to update db variables
-5. Create and copy ssh-key to controlled servers: 
-```
-  ssh-keygen
-  ssh-copy-id root@controlled-server-ip
-``` 
-6. Run `./squidman.pl controlled-server-ip`
+5. Create and copy ssh-key to controlled servers: `ssh-keygen`
+6. Copy the key to controlled server `ssh-copy-id root@controlled-server-ip`
+7. Run `./squidman.pl controlled-server-ip`
 
