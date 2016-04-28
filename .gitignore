@@ -1,3 +1,6 @@
 squidman.acl
 passwd
 squidman.log
+iplist.txt
+iplist.out
+out.txt

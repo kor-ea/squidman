@@ -10,10 +10,9 @@ open(SUBNETLIST,$listofips) || die "!!! can\'t read $listofips";
 open(IPLIST, ">iplist.out") || die "!!! can\'t create iplist.out";
 
 open(IFACES,">>/etc/network/interfaces") || die "!!! can\'t write to interfaces";
+#open(IFACES,">out.txt") || die "!!! error";
 while(<SUBNETLIST>){
-	my ($first3octets) = ($_ =~ /(\d+\.\d+\.\d+\.)/);
-	my ($lastoctet) = ($_ =~ /.+\.(\d+)/);
-	my ($mask) = ($_ =~ /\/(\d{2})/);
+	my ($first3octets,$lastoctet,$mask) = ($_ =~ /(\d+\.\d+\.\d+\.)(\d+)\/(\d{2})/);
 	for (my $i = 1; $i <= $hosts{$mask}; $i++){
 		my $newip = $lastoctet + $i;
 		my $ip =  $first3octets.$newip;	
