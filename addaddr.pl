@@ -4,13 +4,14 @@ my ($listofips) = @ARGV;
 my $iface = $ARGV[2] || "venet0";
 my $intnum = $ARGV[1] || 0;
 my %hosts = ('29'=> 6, '28' => 14, '27' => 30, '26' => 62, '25' => 126, '24' => 254);
+my %masks = ('29'=> 248, '28' => 240, '27' => 224, '26' => 192, '25' => 128, '24' => 0);
 die "Usage: perl -w addaddr.pl input-file first-subint-num main-int" unless (defined $listofips);
 
 open(SUBNETLIST,$listofips) || die "!!! can\'t read $listofips";
 open(IPLIST, ">iplist.out") || die "!!! can\'t create iplist.out";
 
-open(IFACES,">>/etc/network/interfaces") || die "!!! can\'t write to interfaces";
-#open(IFACES,">out.txt") || die "!!! error";
+#open(IFACES,">>/etc/network/interfaces") || die "!!! can\'t write to interfaces";
+open(IFACES,">out.txt") || die "!!! error";
 while(<SUBNETLIST>){
 	my ($first3octets,$lastoctet,$mask) = ($_ =~ /(\d+\.\d+\.\d+\.)(\d+)\/(\d{2})/);
 	for (my $i = 1; $i <= $hosts{$mask}; $i++){
@@ -20,7 +21,7 @@ while(<SUBNETLIST>){
 		print IFACES "auto $iface:$intnum\n";
 		print IFACES "iface $iface:$intnum inet static\n";
 		print IFACES "     address $ip\n";
-		print IFACES "     netmask 255.255.255.255\n\n";
+		print IFACES "     netmask 255.255.255.$masks{$mask}\n\n";
 		$intnum++;
 	}
 }
