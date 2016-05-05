@@ -78,7 +78,10 @@ $dbh->disconnect();
 
 if ($recordfound){
 	print "\nCopying config to $squidmainip\...\n";
-	system("/usr/bin/scp $acl $htpasswd squid.conf $squidmainip:/etc/squid3/") == 0 || die "!!! can\'t copy config to remote";
+	system("/usr/bin/scp $acl squid.conf $squidmainip:/etc/squid3/") == 0 || die "!!! can\'t copy config to remote";
+	if ($htpasswd_exists){
+		system("/usr/bin/scp $htpasswd $squidmainip:/etc/squid3/") == 0 || die "!!! can\'t copy $htpasswd to remote";
+	}
 	#system("/usr/bin/ssh -t $squidmainip \'squid3 -k parse &1>/dev/null\'") == 0 || die "---error in squid config" ;
 	print "\nApplying config...\n";
 	system("/usr/bin/ssh -t $squidmainip \'squid3 -k reconfigure\'") == 0 || die "!!! can\'t apply config" ;

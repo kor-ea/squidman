@@ -10,8 +10,8 @@ die "Usage: perl -w addaddr.pl input-file first-subint-num main-int" unless (def
 open(SUBNETLIST,$listofips) || die "!!! can\'t read $listofips";
 open(IPLIST, ">iplist.out") || die "!!! can\'t create iplist.out";
 
-#open(IFACES,">>/etc/network/interfaces") || die "!!! can\'t write to interfaces";
-open(IFACES,">out.txt") || die "!!! error";
+open(IFACES,">>/etc/network/interfaces") || die "!!! can\'t write to interfaces";
+#open(IFACES,">out.txt") || die "!!! error";
 while(<SUBNETLIST>){
 	my ($first3octets,$lastoctet,$mask) = ($_ =~ /(\d+\.\d+\.\d+\.)(\d+)\/(\d{2})/);
 	for (my $i = 1; $i <= $hosts{$mask}; $i++){
