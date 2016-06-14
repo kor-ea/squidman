@@ -11,15 +11,17 @@ open(IPLIST, ">iplist.out") || die "!!! can\'t create iplist.out";
 
 open(IFACES,">>/etc/network/interfaces") || die "!!! can\'t write to interfaces";
 #open(IFACES,">out.txt") || die "!!! error";
-while(<SUBNETLIST>){
-	my $ip = new NetAddr::IP($_);
+while(<SUBNETLIST> =~ /(\d+\.\d+\.\d+\.\d+\/\d{2})/){
+	my $ip = new NetAddr::IP($1);
 	while ($ip < $ip->broadcast){
-		print IPLIST $ip->addr."\n";
-		print IFACES "auto $iface:$intnum\n";
-		print IFACES "iface $iface:$intnum inet static\n";
-		print IFACES "     address ".$ip->addr."\n";
-		print IFACES "     netmask ".$ip->mask."\n\n";
-		$intnum++;
+		if ($ip ne $ip->network){
+			print IPLIST $ip->addr."\n";
+			print IFACES "auto $iface:$intnum\n";
+			print IFACES "iface $iface:$intnum inet static\n";
+			print IFACES "     address ".$ip->addr."\n";
+			print IFACES "     netmask ".$ip->mask."\n\n";
+			$intnum++;
+		}
 		$ip++;
 	}
 }
