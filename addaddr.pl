@@ -4,6 +4,7 @@ use NetAddr::IP;
 my ($listofips) = @ARGV;
 my $iface = $ARGV[2] || "venet0";
 my $intnum = $ARGV[1] || 0;
+my $cnt = 0;
 die "Usage: perl -w addaddr.pl input-file first-subint-num main-int" unless (defined $listofips);
 
 open(SUBNETLIST,$listofips) || die "!!! can\'t read $listofips";
@@ -21,6 +22,7 @@ while(<SUBNETLIST> =~ /(\d+\.\d+\.\d+\.\d+\/\d{2})/){
 			print IFACES "     address ".$ip->addr."\n";
 			print IFACES "     netmask ".$ip->mask."\n\n";
 			$intnum++;
+			$cnt++;
 		}
 		$ip++;
 	}
@@ -29,4 +31,4 @@ close(IPLIST);
 close(SUBNETLIST);
 close(IFACES);
 #system("systemctl restart networking") == 0 || die "!!! can\'t apply config" ;
-
+print $cnt." sub-interfaces have been created.\n";
